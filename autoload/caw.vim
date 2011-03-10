@@ -7,7 +7,7 @@ set cpo&vim
 " }}}
 
 
-" All keymappings are bound to this function.
+" All keymappings are bound to this function except operator.
 function! caw#do_generic(mode, type, action) "{{{
     try
         return call(
@@ -20,6 +20,34 @@ function! caw#do_generic(mode, type, action) "{{{
         echomsg '[' . v:exception . ']::[' . v:throwpoint . ']'
         echohl None
     endtry
+endfunction "}}}
+
+" operator keymappings function.
+function! caw#opfunc(optype) "{{{
+    let mode = a:optype =~# '^\(char\|line\|block\)$' ?
+    \   'n' : 'v'
+    let type   = b:__caw_opfunc_args[0]
+    let action = b:__caw_opfunc_args[1]
+    unlet b:__caw_opfunc_args
+    call s:reselect(a:optype)
+    return caw#do_generic(mode, type, action)
+endfunction "}}}
+function! s:reselect(optype) "{{{
+    " Save selected range by text-object
+    " into < and > registers.
+    if a:optype ==# 'char'
+        let cmd = "'[v']\<Esc>"
+    elseif a:optype ==# 'line'
+        let cmd = "'[V']\<Esc>"
+    elseif a:optype ==# 'block'
+        let cmd = "'[\<C-v>']\<Esc>"
+    else    " from visual-mode
+        " The range are saved in already < and > registers.
+        let cmd = ''
+    endif
+    if cmd != ''
+        silent execute 'normal!' cmd
+    endif
 endfunction "}}}
 
 " Misc. functions.

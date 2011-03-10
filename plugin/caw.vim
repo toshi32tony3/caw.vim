@@ -150,6 +150,40 @@ if !g:caw_no_default_keymappings
 endif
 
 
+" operator
+function! s:map_operator_plug(type, action) "{{{
+    let lhs = printf(
+    \   '<Plug>(caw:%s:%s:operator)', a:type, a:action)
+    let opfunc_optional_args = {}
+    function opfunc_optional_args.bind(type, action)
+        return printf(
+        \   ':<C-u>let b:__caw_opfunc_args = %s<CR>',
+        \   string([a:type, a:action]))
+    endfunction
+
+    execute
+    \   'nnoremap'
+    \   '<silent>'
+    \   lhs
+    \   opfunc_optional_args.bind(a:type, a:action)
+    \   . ':set opfunc=caw#opfunc<CR>g@'
+    execute
+    \   'vnoremap'
+    \   '<silent>'
+    \   lhs
+    \   opfunc_optional_args.bind(a:type, a:action)
+    \   ':<C-u>call caw#opfunc('.string(visualmode()).')<CR>'
+endfunction "}}}
+function! s:define_operator() "{{{
+    for type in ['i', 'I', 'a', 'wrap']
+        for action in ['comment', 'uncomment', 'toggle']
+            call s:map_operator_plug(type, action)
+        endfor
+    endfor
+endfunction "}}}
+call s:define_operator()
+
+
 
 " Restore 'cpoptions' {{{
 let &cpo = s:save_cpo
