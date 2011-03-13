@@ -109,6 +109,9 @@ endfunction "}}}
 call s:define_generic()
 
 
+" dwim
+call s:map_generic('dwim', 'toggle')
+
 
 " i/I/a
 if !g:caw_no_default_keymappings

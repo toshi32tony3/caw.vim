@@ -787,6 +787,16 @@ let s:Togglable = {
 " }}}
 
 
+" dwim {{{
+function! s:caw_dwim_toggle(mode) "{{{
+    " TODO
+endfunction "}}}
+
+let s:caw.dwim = {
+\   'toggle': s:local_func('caw_dwim_toggle'),
+\}
+" }}}
+
 " i {{{
 
 function! s:caw_i_comment_normal(lnum, ...) dict "{{{
