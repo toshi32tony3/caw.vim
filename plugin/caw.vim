@@ -111,6 +111,7 @@ call s:define_generic()
 
 " dwim
 call s:map_generic('dwim', 'toggle')
+call s:map_user('c', 'dwim:toggle')
 
 
 " i/I/a
@@ -120,7 +121,6 @@ if !g:caw_no_default_keymappings
     call s:map_user('a', 'a:comment')
     call s:map_user('ui', 'i:uncomment')
     call s:map_user('ua', 'a:uncomment')
-    call s:map_user('c', 'i:toggle')
 endif
 
 
