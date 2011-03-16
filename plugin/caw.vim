@@ -153,26 +153,30 @@ endif
 " operator
 function! s:map_operator_plug(type, action) "{{{
     let lhs = printf(
-    \   '<Plug>(caw:%s:%s:operator)', a:type, a:action)
-    let opfunc_optional_args = {}
-    function opfunc_optional_args.bind(type, action)
-        return printf(
-        \   ':<C-u>let b:__caw_opfunc_args = %s<CR>',
-        \   string([a:type, a:action]))
-    endfunction
+    \   '<Plug>(caw:%s:%s:operator)',
+    \   a:type, a:action
+    \)
+    let opfunc_optional_args = printf(
+    \   ':<C-u>let b:__caw_opfunc_args = %s<CR>',
+    \   string([a:type, a:action])
+    \)
 
     execute
     \   'nnoremap'
     \   '<silent>'
     \   lhs
-    \   opfunc_optional_args.bind(a:type, a:action)
+    \   opfunc_optional_args
     \   . ':set opfunc=caw#opfunc<CR>g@'
     execute
     \   'vnoremap'
     \   '<silent>'
     \   lhs
-    \   opfunc_optional_args.bind(a:type, a:action)
-    \   ':<C-u>call caw#opfunc('.string(visualmode()).')<CR>'
+    \   opfunc_optional_args
+    \   . ':call caw#opfunc(visualmode())<CR>'
+    execute
+    \   'onoremap'
+    \   lhs
+    \   'g@'
 endfunction "}}}
 function! s:define_operator() "{{{
     for type in ['i', 'I', 'a', 'wrap']
